@@ -37,6 +37,9 @@ public class CapsuleAnimator : MonoBehaviour
     private MaterialPropertyBlock headPropBlock;
     private MaterialPropertyBlock photoPropBlock;
 
+    // 캡슐의 현재 열림/닫힘 상태를 나타내는 변수
+    private bool isOpened = false; // 초기 상태는 닫힘 (땅 속에 있음)
+
     // --- 기존 Animator 관련 필드 ---
     [Header("기존 Animator 설정")]
     [Tooltip("캡슐 프리팹에 있는 Animator 컴포넌트를 할당해주세요.")]
@@ -116,6 +119,23 @@ public class CapsuleAnimator : MonoBehaviour
         // --- 여기까지 추가 ---
     }
 
+    // --- 여기까지 추가 ---
+
+    /// <summary>
+    /// 캡슐의 현재 상태에 따라 열기 또는 저장 애니메이션을 토글합니다.
+    /// </summary>
+    public void ToggleCapsuleAnimation()
+    {
+        if (isOpened)
+        {
+            PlaySaveAnimation();
+        }
+        else
+        {
+            PlayOpenAnimation();
+        }
+    }
+
     private IEnumerator AnimateClipHeight(float start, float end)
     {
         float elapsedTime = 0f;
@@ -162,12 +182,14 @@ public class CapsuleAnimator : MonoBehaviour
     public void OnOpenAnimationComplete()
     {
         Debug.Log("열기 애니메이션 완료! 이제 콘텐츠를 표시합니다.");
+        isOpened = true; // 애니메이션 완료 후 상태 업데이트
         // 예: 여기에 캡슐에 저장된 사진을 보여주는 코드를 추가합니다.
     }
 
     public void OnSaveAnimationComplete()
     {
         Debug.Log("저장 애니메이션 완료!");
+        isOpened = false; // 애니메이션 완료 후 상태 업데이트
         // 예: RN <-> Unity 연동 시, 여기서 RN으로 '저장 완료' 메시지를 보냅니다.
     }
 }
